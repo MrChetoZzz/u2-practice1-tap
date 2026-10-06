@@ -3,17 +3,24 @@ import { TaskFilters } from './components/TaskFilters'
 import { TaskForm } from './components/TaskForm'
 import { TaskList } from './components/TaskList'
 import { TaskSummary } from './components/TaskSummary'
+import { useStudyPlan } from './hooks/useStudyPlan'
 
 export default function App() {
+  const studyPlan = useStudyPlan()
+
   return (
     <main className="app">
       <Header />
       <section className="layout">
-        <TaskForm />
+        <TaskForm error={studyPlan.error} onAddTask={studyPlan.addTask} />
         <section className="board">
-          <TaskSummary />
-          <TaskFilters />
-          <TaskList />
+          <TaskSummary counts={studyPlan.counts} />
+          <TaskFilters activeFilter={studyPlan.filter} onFilterChange={studyPlan.setFilter} />
+          <TaskList
+            tasks={studyPlan.tasks}
+            onToggle={studyPlan.toggleTask}
+            onDelete={studyPlan.deleteTask}
+          />
         </section>
       </section>
     </main>
